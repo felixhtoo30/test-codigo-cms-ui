@@ -1,7 +1,6 @@
 import {
   CREATE_VOUCHER,
   RETRIEVE_VOUCHERS,
-  RETRIEVE_ONE_VOUCHER,
   UPDATE_VOUCHER,
   DELETE_VOUCHER,
 } from "../actions/types";
@@ -17,18 +16,6 @@ const voucherReducer = (vouchers = initialState, action) => {
 
     case RETRIEVE_VOUCHERS:
       return payload;
-
-    case RETRIEVE_ONE_VOUCHER:
-      return vouchers.map((voucher) => {
-        if (voucher.id === payload.id) {
-          return {
-            ...voucher,
-            ...payload
-          };
-        } else {
-          return voucher;
-        }
-      });
 
     case UPDATE_VOUCHER:
       return vouchers.map((voucher) => {

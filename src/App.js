@@ -1,7 +1,4 @@
 import { useState } from "react";
-import "@coreui/coreui/dist/css/coreui.min.css";
-import '@coreui/icons/css/all.min.css';
-import "bootstrap/dist/css/bootstrap.min.css";
 import { CContainer } from "@coreui/react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";

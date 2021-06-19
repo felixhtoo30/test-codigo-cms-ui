@@ -1,7 +1,6 @@
 import {
   CREATE_VOUCHER,
   RETRIEVE_VOUCHERS,
-  RETRIEVE_ONE_VOUCHER,
   UPDATE_VOUCHER,
   DELETE_VOUCHER,
 } from "./types";
@@ -29,19 +28,6 @@ export const retrieveVouchers = () => async (dispatch) => {
 
     dispatch({
       type: RETRIEVE_VOUCHERS,
-      payload: res.data,
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const retrieveOneVoucher = (id) => async (dispatch) => {
-  try {
-    const res = await VoucherDataService.get(id);
-
-    dispatch({
-      type: RETRIEVE_ONE_VOUCHER,
       payload: res.data,
     });
   } catch (err) {

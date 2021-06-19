@@ -70,7 +70,7 @@ const CreateEVoucher = () => {
       <h3 className="mt-4">Create eVoucher</h3>
       <CForm onSubmit={saveVoucher}>
         {submitted ? (
-            <CAlert color="success">You submitted successfully! <i className="cil-clear-all float-right"></i></CAlert>
+            <CAlert color="success">You submitted successfully! <i className="cil-x-circle float-end"></i></CAlert>
         ) : (
           ""
         )}

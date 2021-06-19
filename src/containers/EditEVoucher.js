@@ -12,43 +12,74 @@ import {
   CAlert,
 } from "@coreui/react";
 import { useLocation } from "react-router-dom";
-import { retrieveOneVoucher, updateVoucher } from "../actions/vouchers";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { updateVoucher } from "../actions/vouchers";
+import VoucherDataService from "../services/voucherService";
 
 const EditEVoucher = () => {
   const location = useLocation();
-  
+
   const dispatch = useDispatch();
-  const [voucher, setVoucher] = useSelector((state) => state.voucher);
+  const initialVoucherState = {
+    id: null,
+    title: "",
+    description: "",
+    expiry_date: "",
+    amount: "",
+    qty: 0,
+    disc_pay_method: "",
+    buy_type: "",
+    max_buy_limit: 0,
+    max_gift_limit: 0,
+  };
+  const [voucher, setVoucher] = useState(initialVoucherState);
   const [updated, setUpdated] = useState(false);
-  
+
+  const getVoucher = (id) => {
+    VoucherDataService.get(id)
+      .then((response) => {
+        setVoucher(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   useEffect(() => {
-    dispatch(retrieveOneVoucher(location.state.voucherId));
-  });
+    getVoucher(location.state.voucherId);
+  }, [location.state.voucherId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVoucher({ ...voucher, [name]: value });
-    e.preventDefault();
   };
-  
+
   const onUpdateVoucher = (e) => {
     e.preventDefault();
-    dispatch(updateVoucher());
-    setUpdated(true);
-  }
+    dispatch(updateVoucher(voucher.id, voucher))
+      .then((response) => {
+        console.log(response);
+        setUpdated(true);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
-    <CContainer>
+    <CContainer className="col-xl-8">
       <h3 className="mt-4">Edit eVoucher</h3>
-        {updated ? (
-          <CAlert color="success">
-            You updated successfully!{" "}
-            <i className="cil-clear-all float-right"></i>
-          </CAlert>
-        ) : (
-          ""
-        )}
+      {updated ? (
+        <CAlert color="success">
+          You updated successfully!
+          <i
+            className="cil-x-circle float-end"
+            onClick={() => setUpdated(!updated)}
+          ></i>
+        </CAlert>
+      ) : (
+        ""
+      )}
       <CForm onSubmit={onUpdateVoucher}>
         <CRow className="g-3 my-3">
           <CCol xs>
@@ -146,10 +177,9 @@ const EditEVoucher = () => {
               id="buytype1"
               label="Only Me Usage"
               name="buy_type"
-              value={voucher.buy_type}
-              onChange={() => {
-                voucher.buy_type = 1;
-              }}
+              value="1"
+              onChange={handleInputChange}
+              defaultChecked={voucher.buy_type === 1 ? `true` : `false`}
             />
             <CFormCheck
               inline
@@ -157,10 +187,9 @@ const EditEVoucher = () => {
               id="buytype2"
               label="Gift to Others"
               name="buy_type"
-              value={voucher.buy_type}
-              onChange={() => {
-                voucher.buy_type = 2;
-              }}
+              value="2"
+              onChange={handleInputChange}
+              defaultChecked={voucher.buy_type === 2 ? `true` : `false`}
             />
           </CCol>
         </CRow>
